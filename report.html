@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Data Engineering Case Study</title>
+        <style>
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="data-engineering-case-study">Data Engineering Case Study</h1>
+<ul>
+<li><a href="#data-engineering-case-study">Data Engineering Case Study</a>
+<ul>
+<li><a href="#prompt">Prompt</a>
+<ul>
+<li><a href="#download-data">Download Data</a></li>
+<li><a href="#part-1-data-exploration-and-evaluation">Part 1: Data Exploration and Evaluation</a></li>
+<li><a href="#part-2-data-pipeline-engineering">Part 2: Data Pipeline Engineering</a></li>
+</ul>
+</li>
+<li><a href="#case-study">Case Study</a>
+<ul>
+<li><a href="#part-1-data-exploration-and-evaluation-1">Part 1: Data Exploration and Evaluation</a>
+<ul>
+<li><a href="#findings">Findings</a></li>
+</ul>
+</li>
+<li><a href="#part-2-data-pipeline-engineering-1">Part 2: Data Pipeline Engineering</a>
+<ul>
+<li><a href="#the-storage-engine">The Storage Engine</a></li>
+<li><a href="#the-data-model">The Data Model</a></li>
+<li><a href="#automated-pipeline-between-data-lake-and-warehouse">Automated Pipeline Between Data Lake and Warehouse</a></li>
+<li><a href="#discussion-of-future-system-improvements">Discussion of Future System Improvements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="prompt">Prompt</h2>
+<h3 id="download-data">Download Data</h3>
+<p>We will be exploring Lending Club’s loan origination data from 2007-2018. <a href="https://www.kaggle.com/wordsforthewise/lending-club#">Download from Kaggle</a></p>
+<h3 id="part-1-data-exploration-and-evaluation">Part 1: Data Exploration and Evaluation</h3>
+<p><em>Create an exploratory data analysis project. Load the data and perform any necessary cleaning and aggregations to explore and better understand the dataset. Based on your exploration, please describe your high level findings in a few sentences. Please include two data visualizations and two summary statistics to support these findings.</em></p>
+<h3 id="part-2-data-pipeline-engineering">Part 2: Data Pipeline Engineering</h3>
+<p><em>Build a prototype of a production data pipeline that will feed an analysis system (data warehouse) based on this dataset. This system will allow data scientists and data analysts to interactively query and explore the data, and will also be used for machine learning model training and evaluation. Assume that the system will receive periodic updates of this dataset over time, and that these updates will need to be processed in a robust, efficient way. For this section, please:</em></p>
+<ul>
+<li><em>Create a data model / schema in a database or storage engine of your choice.</em></li>
+<li><em>Develop code that will persist the dataset into this storage system in a fully automated way.</em></li>
+<li><em>Include any data validation routines that you think may be necessary.</em></li>
+</ul>
+<p><em>Prioritize simplicity in your data model and processing code. Explain your thought process and document any alternate data models you considered along the way. Finally, wrap up with a discussion of system improvements that could be addressed in the future.</em></p>
+<hr style="border-bottom: 0px;page-break-before: always;">
+<h2 id="case-study">Case Study</h2>
+<h3 id="part-1-data-exploration-and-evaluation-1">Part 1: Data Exploration and Evaluation</h3>
+<h4 id="findings">Findings</h4>
+<div style="margin-bottom:15px;padding-left:0px">
+<figure style='display:block;padding-left:20px;padding-bottom:10px;float:right; margin: 0' >
+        <img src="file:///c:\Users\mende\Documents\MEGAsync\Data-Engineer-Case-Study\Images\Summary Statistics by Grade.png" />
+        <figcaption style='text-align:center; padding-bottom: 5px'>Summary by Grade with Simple Rate of Return</figcaption>
+</figure>
+As one would expect, the mean interest rate and default rate rise as the grade decreases. Many who look at the Lending Club data are particularly interested in the platform as an alternative investment. Using a simple rate of return, it is clear that the mean rate of return decreases dramatically with lower grade loans, much of which is attributable to low-grade loans that quickly default.
+<figure style='display:block;margin:0px;margin-top:10px' >
+       <img src="file:///c:\Users\mende\Documents\MEGAsync\Data-Engineer-Case-Study\Images\Distribution of Simple Annualized Rate of Return by Loan Grade.png" />
+ <figcaption style='text-align:center'>Distribution of Simple Annualized Rate of Return by Loan Grade</figcaption>
+</figure>
+</div>
+<div style="margin-bottom:15px;padding-left:0px">
+<figure style='display:block;padding-left:20px;padding-bottom:10px;float:right; margin: 0' >
+        <img src="file:///c:\Users\mende\Documents\MEGAsync\Data-Engineer-Case-Study\Images\Summary Statistics by Year.png" />
+        <figcaption style='text-align:center; padding-bottom: 5px'>Summary Statistics of Loan Issuance and Default Rate </figcaption>
+</figure>
+It is also important to understand how the loan statistics change year to year to give insight into the strictness of Lending Club's underwriting process. Clearly, the Mean Debt-to-Income ratio is increasing across all grades while Lending Club is also inconsistent about verifiying borrowers income. This can imply that Lending Club is issuing riskier loans. Excluding 2017 and 2018 (as those years are too recent for the loans to play out) the default rate has increased every year from 2010 to 2016.
+<figure style='display:block;margin:0px;margin-top:10px' >
+       <img src="file:///c:\Users\mende\Documents\MEGAsync\Data-Engineer-Case-Study\Images\Debt to Income by Year.png" />
+ <figcaption style='text-align:center'>Debt-to-Income Ratio by Year</figcaption>
+</figure>
+</div>
+<hr style="border-bottom: 0px;page-break-before: always;">
+<h3 id="part-2-data-pipeline-engineering-1">Part 2: Data Pipeline Engineering</h3>
+<h4 id="the-storage-engine">The Storage Engine</h4>
+<p>We will be using <a href="https://www.snowflake.com">Snowflake</a> for the storage engine as it is a fully managed cloud-based data warehouse which supports infinite scaling in both compute and storage and is highly optimized for analytics tasks. Although our Lending Club dataset is only ~400MB, Snowflake would be an excellent choice for larger systems to any size.</p>
+<p>Though PostGres provides excellent storage capabilities, it does not scale for analytics workloads. Microsoft SQL Server is much better as it offers columnar database options but still requires the company to manage it themselves. Going with Spotify's take on Business Intelligence, that a company should focus as little as possible on supporting its infrastructure technologies. Snowflake fulfills all these requirements.</p>
+<h4 id="the-data-model">The Data Model</h4>
+<p>The data model follows a semi-normalized structure with a central fact table (&quot;ACCEPTED&quot;) and dimension tables in order for the database to contain the entire dataset from Lending Club. The data is semi-normalized as most columns that would be analyzed are found in the &quot;ACCEPTED&quot; table and therefore don't require any joins. A view is included to reconstruct the original Lending Club table. The additional dimensions are features that may be analyzed on their own but not usually with the fact table.</p>
+<div style="margin:20px">
+    <div align='center'>
+        <img src="file:///c:\Users\mende\Documents\MEGAsync\Data-Engineer-Case-Study\Images\Data%20Model.png" />
+        <div>Data Model. <i>Designed using <a href="dbdiagrams.io">dbdiagrams.io</a></i></div>
+    </div>
+</div>
+I considered moving the member profile information to another dimension (using `member_id` as the foreign key) but ultimately decided against it. My reasoning twofold: Much of the profile information is very useful for analytics, and therefore should be accessed without joins. Additionally, unlike a user profile which is constantly updated with the most current information, the member information here is a snapshot in time as of the acceptance of the loan.
+<h4 id="automated-pipeline-between-data-lake-and-warehouse">Automated Pipeline Between Data Lake and Warehouse</h4>
+<p>The entire ETL pipeline is constructed in Python from start to finish. I considered using SQL but decided on Python for its flexibility and CPython based table/matrix operations. Automatic periodic updates are acheived through the <code>schedule</code> module, set to update every day at <code>00:00</code>. Alternatively, this could be handled through CRON.</p>
+<p>The module extracts the data from the application (in this case assumed to be PostGres) and loading into the Snowflake data warehouse through the <code>Pipe</code> class which is initialized with all the information for transforming, validating, and dimensioning the table. See <a href="README-Pipe.html">README-Pipe.md</a> for details on the class.</p>
+<p>The order of operations is as follows:</p>
+<ol>
+<li>Initialize the pipes that the module will schedule.
+<ul>
+<li>This includes requesting the most recent update date from the Snowflake database.</li>
+</ul>
+</li>
+<li>Schedule the table updates job.</li>
+<li>Run table updates once upon initializing.</li>
+<li>Pull new data from application.</li>
+<li>Transform -&gt; validate -&gt; dimensionize.</li>
+<li>Upload data to each table in Snowflake warehouse.
+<ol>
+<li>This uses a <code>MERGE</code> on the table's <code>id</code> column to upsert by inserting if no match and updating if the <code>id</code> already exists in the database. This is important because we are generally only increasing the number of records and updating loans as details change.</li>
+</ol>
+</li>
+<li>Update the pipe's <code>last_updated</code> property to the <code>today</code> variable.</li>
+</ol>
+<h4 id="discussion-of-future-system-improvements">Discussion of Future System Improvements</h4>
+<p>Future improvements to the system should include full support for catching drop rows to notify the upstream application about invalid rows, which may allow the upstream application to attempt to recover some data.</p>
+<p>We would also want to automate updating the pipeline when the application or target schema change which would greatly reduce the upkeep costs of the pipeline. An alternative would be to leverage the expertise of a fully managed pipeline system such as <a href="https://www.striim.com/integrations/postgresql-snowflake/">Striim</a> or <a href="https://www.stitchdata.com/integrations/postgresql/snowflake/">Stitch</a> to free internal personnel for business oriented goals, similar to the benefits of using Snowflake in the first place.</p>
+<p>We could leverage Snowflakes internal tools to support raw file storage, whether structured or semi-structured which allows for raw data to be stored in the warehouse for access if necessary. Also allows for ETL processes to happen on the warehouse rather than within scripts or connectors. The data warehouse also does not need to rely on the producing application or data lake for any structure in the data. Additionally, we could stage the raw or JSON files and then use pipes to ETL the data in near real-time.</p>
+<p>Finally, should we decide to run the pipeline ourselves, or want to integrate additional services into the pipeline Kafka provides a roubst method for updating in near real-time or even to simply allow the pipeline to know if data has been created or updated.</p>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body {
+    max-width: 900px;
+    margin:auto
+  },
+  h1,h2,h3,h4,h5 {
+    font-weight: bold!important;
+  }
+</style>
+    </body>
+    </html>
