@@ -14,4 +14,4 @@ We will be exploring Lending Club’s loan origination data from 2007-2018. [Dow
 
 *Prioritize simplicity in your data model and processing code. Explain your thought process and document any alternate data models you considered along the way. Finally, wrap up with a discussion of system improvements that could be addressed in the future.*
 
-### See [Data Engineering Case Study.pdf](Data Engineering Case Study.pdf) for the report.
+### See [Data Engineering Case Study.pdf](Data%20Engineering%20Case%20Study.pdf) for the report.
